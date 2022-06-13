@@ -1,0 +1,26 @@
+{
+    "name": "vue-i18n-pico",
+    "version": "0.1.0",
+    "description": "Slim & fast i18n for Vue.js",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "lint": "eslint src/ test/ index.js",
+        "fix": "eslint --fix src/ test/ index.js",
+        "test": "mocha"
+    },
+    "keywords": ["vue", "i18n"],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/therealcoder1337/vue-i18n-pico.git"
+    },
+    "devDependencies": {
+        "@babel/eslint-parser": "^7.18.2",
+        "eslint": "^8.17.0",
+        "eslint-config-google": "^0.14.0",
+        "eslint-plugin-import": "^2.26.0",
+        "mocha": "^10.0.0",
+        "should": "^13.2.3"
+    }
+}

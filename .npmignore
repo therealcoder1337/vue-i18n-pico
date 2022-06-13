@@ -1,0 +1,3 @@
+test/
+.mocharc.json
+.eslintrc.cjs
