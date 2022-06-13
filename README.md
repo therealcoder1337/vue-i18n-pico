@@ -10,8 +10,8 @@ When just using features available here, the migration is quite easy. `vue-i18n-
 
 ### Linked messages
 
-Variables start with `@:` and then only support `A-Z`, `0-9` and `.` characters. Example: `Some translation string with @:animals.littleCats!` would be interpreted as `Some translation string with kittens!`, if the value for key `animals.littleCats` equals `kittens`.
-Note that we don't support some special syntaxes of `vue-i18n`, which means that what e.g. would have been `„@:{\'someOtherVariable\'}“` (linked message inside German quotation marks) in `vue-i18n` must now be written as `„@:someOtherVariable“`.
+Linked messages allow reusing translations. They start with `@:` and then only support `A-Z`, `0-9` and `.` characters. Example: `Some translation string with @:animals.littleCats!` would be interpreted as `Some translation string with kittens!`, if the value for key `animals.littleCats` equals `kittens`.
+Note that we don't support some special syntaxes of `vue-i18n`, which means that what e.g. would have been `„@:{\'someOtherLinkedMessage\'}“` (linked message inside German quotation marks) in `vue-i18n` must now be written as `„@:someOtherLinkedMessage“`.
 
 ### Message interpolation
 
