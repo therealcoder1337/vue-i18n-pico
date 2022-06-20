@@ -1,4 +1,4 @@
-import {prepareMessages} from '../src/prepare-messages.js';
+import {prepareMessages, prepareAllMessages} from '../src/prepare-messages.js';
 
 describe('prepareMessages', () => {
     it('should throw if there are non resolvable dependencies', () => {
@@ -112,5 +112,20 @@ describe('prepareMessages', () => {
 
         const results = prepareMessages(messages);
         results.debugMe.should.eql('This is „@:{\'a.unsupportedSyntax\'}“, and should „@:{\'not.beProcessed123\'}“ and instead just be returned. @:<other weirdness here>');
+    });
+});
+
+describe('prepareAllMessages', () => {
+    it('should act as a wrapper for prepareMessages and not consider locale keys as part of the linked message path', () => {
+        const messages = {
+            'de-DE': {aTest: {nested: '@:aTest.nested2', nested2: 'abc'}},
+            'en-US': {aTest: {nested: '@:aTest.nested3', nested2: 'abc', nested3: 'def'}}
+        };
+
+        const results = prepareAllMessages(messages);
+        results.should.eql({
+            'de-DE': {aTest: {nested: 'abc', nested2: 'abc'}},
+            'en-US': {aTest: {nested: 'def', nested2: 'abc', nested3: 'def'}}
+        });
     });
 });
