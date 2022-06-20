@@ -41,8 +41,6 @@ function resolveDependencies (dependencies, messages, messagesRaw) {
         if (idx === arr.length - 1) {
             carry[prop] = val;
             return null;
-        } else if (!carry[prop]) {
-            carry[prop] = {};
         }
 
         return carry[prop];
