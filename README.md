@@ -65,6 +65,10 @@ Notes:
 
 Currently only aiming to support Vue 3 (CLI). Vue 2 will not be supported.
 
+## Disclaimer
+
+This is a private project that is not in any way affiliated with Vue.js or vue-i18n.
+
 ## Contributing
 
 For bugfixes: Feel free to open a PR. Include a test if possible.
