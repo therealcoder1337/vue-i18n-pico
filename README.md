@@ -1,5 +1,11 @@
 # vue-i18n-pico
 
+[![Vue.js 3](https://img.shields.io/badge/Vue.js-3-brightgreen)](https://vuejs.org/)
+[![GitHub license](https://img.shields.io/github/license/therealcoder1337/vue-i18n-pico)](https://github.com/therealcoder1337/vue-i18n-pico/blob/master/LICENSE.md)
+[![codecov](https://codecov.io/gh/therealcoder1337/vue-i18n-pico/branch/master/graph/badge.svg?token=Cm6EOTXH2q)](https://codecov.io/gh/therealcoder1337/vue-i18n-pico)
+[![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](/package.json)
+[![Known Vulnerabilities](https://snyk.io/test/github/therealcoder1337/vue-i18n-pico/badge.svg)](https://snyk.io/test/github/therealcoder1337/vue-i18n-pico)
+
 Easy, small & fast i18n for Vue! While `vue-i18n` uses thousands of lines of code, this one just uses ~200 lines of source code at the time of writing (excluding tests and types). It does so by providing a smaller API, containing only some essential features.
 
 ## Features & advantages
