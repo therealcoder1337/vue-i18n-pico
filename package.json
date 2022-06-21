@@ -1,6 +1,6 @@
 {
     "name": "vue-i18n-pico",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Slim & fast i18n for Vue.js",
     "main": "index.js",
     "type": "module",
@@ -9,7 +9,10 @@
         "fix": "eslint --fix src/ test/ index.js",
         "test": "mocha"
     },
-    "keywords": ["vue", "i18n"],
+    "keywords": [
+        "vue",
+        "i18n"
+    ],
     "license": "MIT",
     "repository": {
         "type": "git",
