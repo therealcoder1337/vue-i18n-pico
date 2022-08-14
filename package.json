@@ -11,7 +11,12 @@
     },
     "keywords": [
         "vue",
-        "i18n"
+        "vue.js",
+        "vuejs",
+        "i18n",
+        "internationalization",
+        "languages",
+        "plugin"
     ],
     "license": "MIT",
     "repository": {
