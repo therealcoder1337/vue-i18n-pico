@@ -12,15 +12,15 @@ type Plugin = {
 };
 
 type Settings = {
-    messages: Object,
+    messages: object,
     production?: boolean,
     locale?: string,
     fallbackLocale?: string,
 };
 
-type Translate = (key: string) => string;
+type TranslateParams = Array<any> | object;
 
-type TranslateParams = Array<any> | Object;
+type Translate = (key: string, params?: TranslateParams) => string;
 
 type Ref<Type> = {
     value: Type
@@ -37,5 +37,5 @@ export function makePlugin(t: Translate, params?: TranslateParams) : Plugin;
 
 export function useI18n() : I18n;
 
-export function prepareMessages(messages: Object) : Object;
-export function prepareAllMessages(messagesRaw: Object) : Object;
+export function prepareMessages(messages: object) : object;
+export function prepareAllMessages(messagesRaw: object) : object;
