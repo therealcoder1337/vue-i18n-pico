@@ -1,14 +1,7 @@
-interface AppConfig {
-    globalProperties: Object;
-}
-
-interface App {
-    provide: Function;
-    config: AppConfig;
-}
+import type {App, Ref} from 'vue';
 
 type Plugin = {
-    install: (app: any) => void
+    install: (app: App) => void
 };
 
 type Settings = {
@@ -21,10 +14,6 @@ type Settings = {
 type TranslateParams = Array<any> | object;
 
 type Translate = (key: string, params?: TranslateParams) => string;
-
-type Ref<Type> = {
-    value: Type
-};
 
 type I18n = {
     t: Translate,
