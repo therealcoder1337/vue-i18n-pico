@@ -33,6 +33,10 @@ Note that we don't support some special syntaxes of `vue-i18n`, which means that
 
 Your translations can have array values and those may even contain nested objects. Example: `{arr: [3, {nested: 'red'}]}` would allow accessing `arr.1.nested` and return `red` or `arr.0` and return `3`.
 
+#### Override the active locale
+
+You can override the active locale by providing it inside options as the third parameter: `t('messageKey', null, {locale: 'de-DE'})`.
+
 ### Attention to performance
 
 This package prefers string functions over regular expressions whenever reasonable; in fact there is only a single regex used currently - and that can be limited to development mode only (see next section).

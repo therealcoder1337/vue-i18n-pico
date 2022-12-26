@@ -13,7 +13,9 @@ type Settings = {
 
 type TranslateParams = Array<any> | object;
 
-type Translate = (key: string, params?: TranslateParams) => string;
+type TranslateOptions = {locale: string};
+
+type Translate = (key: string, params?: TranslateParams | null, options?: TranslateOptions) => string;
 
 type I18n = {
     t: Translate,

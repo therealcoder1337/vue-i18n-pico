@@ -2,8 +2,8 @@ const reduceList = (carry, current, idx) => carry.replaceAll(`{${idx}}`, current
 const reduceNamed = (carry, [name, val]) => carry.replaceAll(`{${name}}`, val);
 
 export default (messages, {locale, fallbackLocale}) => {
-    return function t (name, params) {
-        const translations = messages[locale.value];
+    return function t (name, params, opts) {
+        const translations = messages[opts?.locale ?? locale.value];
         const fallbackTranslations = fallbackLocale?.value && locale.value !== fallbackLocale.value ? messages[fallbackLocale.value] : null;
         const parts = name.split('.');
         const translate = translations => parts.reduce((carry, prop) => carry?.[prop] ?? null, translations);

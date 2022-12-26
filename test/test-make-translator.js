@@ -144,5 +144,22 @@ describe('make-translator', () => {
             t('arr').should.eql('eins,zwei,drei,[object Object],fünf,ipa');
             t('arr2').should.eql('one,two,three,[object Object],five,ipa');
         });
+
+        it('should allow overriding the locale via locale option', () => {
+            const locale = {value: 'de-DE'};
+            const messages = {
+                'de-DE': {
+                    thisIsAMessage: 'Das ist eine Nachricht',
+                    showMore: 'Zeige mehr'
+                },
+                'en-US': {
+                    thisIsAMessage: 'This is a message'
+                }
+            };
+            const t = makeTranslator(messages, {locale});
+
+            t('thisIsAMessage', null, {locale: 'en-US'}).should.eql('This is a message');
+            t('showMore', null, {locale: 'en-US'}).should.eql('showMore');
+        });
     });
 });
