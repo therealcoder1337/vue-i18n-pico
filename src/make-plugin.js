@@ -4,6 +4,8 @@ export default (t, locale) => {
             app.config.globalProperties.$t = t;
 
             app.provide('i18n', {t, locale});
-        }
+        },
+        t,
+        locale
     };
 };

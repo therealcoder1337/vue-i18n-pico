@@ -22,9 +22,11 @@ type I18n = {
     locale: Ref<string>
 };
 
-export function createI18n(settings: Settings): Plugin;
+type PluginWithI18n = Plugin & I18n;
 
-export function makePlugin(t: Translate, params?: TranslateParams) : Plugin;
+export function createI18n(settings: Settings): PluginWithI18n;
+
+export function makePlugin(t: Translate, params?: TranslateParams) : PluginWithI18n;
 
 export function useI18n() : I18n;
 
