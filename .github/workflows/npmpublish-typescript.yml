@@ -1,5 +1,8 @@
 name: Publish TypeScript Branch to npmjs
 on:
+  push:
+    branches:
+      - typescript
   workflow_dispatch:
 jobs:
   build:
