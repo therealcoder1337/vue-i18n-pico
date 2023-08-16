@@ -1,4 +1,6 @@
 .github/
 test/
+src/
+index.ts
 .mocharc.json
 .eslintrc.cjs

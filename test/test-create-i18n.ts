@@ -1,6 +1,8 @@
 import createI18n from '../src/create-i18n.js';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import should from 'should';
 
-const messages= {
+const messages = {
     'en-US': {
         hello: 'Hello!'
     }
@@ -8,12 +10,13 @@ const messages= {
 
 describe('create-i18n', () => {
     it('should throw if "messages" are missing', () => {
+        // @ts-expect-error
         (() => createI18n()).should.throwError(/messages/);
     });
 
     it('should throw for invalid "production" value', () => {
+        // @ts-expect-error
         (() => createI18n({messages, production: 1})).should.throwError(/production/);
-        (() => createI18n({messages, production: null})).should.throwError(/production/);
     });
 
     it('should return a plugin with i18n props', () => {

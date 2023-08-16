@@ -1,0 +1,18 @@
+{
+    "include": ["index.ts", "src/**/*.ts"],
+    "exclude": ["test/"],
+    "compilerOptions": {
+        "lib": ["DOM", "ES2022"],
+        "target": "ES6",
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
+        "rootDir": "./",
+        "outDir": "./dist",
+        "esModuleInterop": true,
+        "strict": true,
+        "declaration": true
+    },
+    "ts-node": {
+        "files": true
+    }
+}

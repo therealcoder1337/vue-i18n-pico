@@ -4,7 +4,7 @@ describe('utils', () => {
     describe('log', () => {
         it('should log with prefix', () => {
             const originalLog = console.log;
-            const logged = [];
+            const logged: string[] = [];
 
             console.log = (...args) => logged.push(...args);
 

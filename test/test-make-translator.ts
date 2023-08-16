@@ -1,13 +1,17 @@
+import type {Ref} from 'vue';
 import makeTranslator from '../src/make-translator.js';
 import deDe from './fixtures/de-DE.js';
 import enUs from './fixtures/en-US.js';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import should from 'should';
+import type {Messages} from '../src/types.js';
 const messages = {['de-DE']: deDe, ['en-US']: enUs};
 
 describe('make-translator', () => {
     describe('t', () => {
         it('should correctly translate for the provided locale', () => {
             const locale = {value: 'de-DE'};
-            const t = makeTranslator(messages, {locale});
+            const t = makeTranslator(messages, {locale} as {locale: Ref<string>});
 
             t('coolTranslation').should.eql('Tolle Übersetzung!');
             t('nested.deep.deeper.car').should.eql('Auto');
@@ -22,7 +26,7 @@ describe('make-translator', () => {
 
         it('should support named interpolation', () => {
             const locale = {value: 'de-DE'};
-            const t = makeTranslator(messages, {locale});
+            const t = makeTranslator(messages, {locale} as {locale: Ref<string>});
 
             t('nested.deep.namedInterp', {coolParam: 'Hey 123', otherParam123: 'Wie geht\'s?'}).should.eql('Hey 123, das ist ein Beispiel. Wie geht\'s?');
             t('nested.deep.namedInterpMultiple', {userName: 'Mista.cat@new', 2: 'wieder'}).should.eql('An Mista.cat@new: Herzlich willkommen, „Mista.cat@new“! Hier sind noch einige Dinge, die wir wieder und wieder durchexerzieren werden, bis du sie verinnerlicht hast. ;)');
@@ -35,7 +39,7 @@ describe('make-translator', () => {
 
         it('should support list interpolation', () => {
             const locale = {value: 'de-DE'};
-            const t = makeTranslator(messages, {locale});
+            const t = makeTranslator(messages, {locale} as {locale: Ref<string>});
 
             t('nested.deep.listInterp', [1, 2, 3]).should.eql('Teste nur die List interpolation, sie beginnt mit 1. Die Parameter lauten 1, 2 und 3.');
             t('nested.deep.listInterp', ['cat', 'dog', 'birb']).should.eql('Teste nur die List interpolation, sie beginnt mit cat. Die Parameter lauten cat, dog und birb.');
@@ -49,20 +53,20 @@ describe('make-translator', () => {
         it('should revert to fallbackLocale if no translation was found', () => {
             const locale = {value: 'de-DE'};
             const fallbackLocale = {value: 'en-US'};
-            const t = makeTranslator(messages, {locale, fallbackLocale});
+            const t = makeTranslator(messages, {locale, fallbackLocale} as {locale: Ref<string>; fallbackLocale: Ref<string>});
             t('onlyInEnglish').should.eql('This translation exists only for locale en-US');
         });
 
         it('should revert to fallbackLocale if selected locale does not exist', () => {
             const locale = {value: 'de-CH'};
             const fallbackLocale = {value: 'en-US'};
-            const t = makeTranslator(messages, {locale, fallbackLocale});
+            const t = makeTranslator(messages, {locale, fallbackLocale} as {locale: Ref<string>; fallbackLocale: Ref<string>});
             t('onlyInEnglish').should.eql('This translation exists only for locale en-US');
         });
 
         it('should return the key for non existing translation', () => {
             const locale = {value: 'de-DE'};
-            const t = makeTranslator(messages, {locale});
+            const t = makeTranslator(messages, {locale} as {locale: Ref<string>});
             t('some.translation.doesNotExist').should.eql('some.translation.doesNotExist');
             locale.value = 'es-ES';
             t('some.translation.doesNotExist').should.eql('some.translation.doesNotExist');
@@ -71,7 +75,7 @@ describe('make-translator', () => {
         it('should also return the key for non-existing locale and missing fallback translation entry', () => {
             const locale = {value: 'en-AU'};
             const fallbackLocale = {value: 'en-US'};
-            const t = makeTranslator(messages, {locale, fallbackLocale});
+            const t = makeTranslator(messages, {locale, fallbackLocale}as {locale: Ref<string>; fallbackLocale: Ref<string>});
 
             t('some.translation.doesNotExist').should.eql('some.translation.doesNotExist');
         });
@@ -95,7 +99,7 @@ describe('make-translator', () => {
                     fallbackEmptyStr2: ''
                 }
             };
-            const t = makeTranslator(messages, {locale, fallbackLocale});
+            const t = makeTranslator(messages, {locale, fallbackLocale}as {locale: Ref<string>; fallbackLocale: Ref<string>});
 
             t('some.deep.emptyStr').should.eql('');
             t('emptyStr2').should.eql('');
@@ -106,7 +110,7 @@ describe('make-translator', () => {
         it('should return string "[object Object]" if the key points to an object (i.e.: is not deep enough)', () => {
             const locale = {value: 'de-DE'};
             const fallbackLocale = {value: 'en-US'};
-            const t = makeTranslator(messages, {locale, fallbackLocale});
+            const t = makeTranslator(messages, {locale, fallbackLocale} as {locale: Ref<string>; fallbackLocale: Ref<string>});
 
             (typeof t('nested.deep.deeper')).should.eql('string');
             t('nested.deep.deeper').should.eql('[object Object]');
@@ -115,16 +119,18 @@ describe('make-translator', () => {
         it('should work with array values and nested array values', () => {
             const locale = {value: 'de-DE'};
             const fallbackLocale = {value: 'en-US'};
-            const messages = {
+            const messages: Messages = {
                 'de-DE': {
                     arr: ['eins', 'zwei', 'drei', {nested: [1, 'vier']}, 'fünf', ['ipa']],
                     deep: {another: [11]}
                 },
                 'en-US': {
+                    arr: ['1', '2', 3, {nested: [3, '1']}, [2]],
                     arr2: ['one', 'two', 'three', {nested: [3, 'four']}, 'five', ['ipa']]
                 }
             };
-            const t = makeTranslator(messages, {locale, fallbackLocale});
+
+            const t = makeTranslator(messages, {locale, fallbackLocale} as {locale: Ref<string>; fallbackLocale: Ref<string>});
 
             t('arr.0').should.eql('eins');
             t('arr.1').should.eql('zwei');
@@ -156,7 +162,7 @@ describe('make-translator', () => {
                     thisIsAMessage: 'This is a message'
                 }
             };
-            const t = makeTranslator(messages, {locale});
+            const t = makeTranslator(messages, {locale} as {locale: Ref<string>});
 
             t('thisIsAMessage', null, {locale: 'en-US'}).should.eql('This is a message');
             t('showMore', null, {locale: 'en-US'}).should.eql('showMore');
