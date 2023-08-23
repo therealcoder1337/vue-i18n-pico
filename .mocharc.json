@@ -1,5 +1,0 @@
-{
-    "recursive": true,
-    "require": "should",
-    "reporter": "spec"
-}
