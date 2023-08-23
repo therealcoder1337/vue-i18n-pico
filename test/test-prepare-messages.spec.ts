@@ -1,4 +1,6 @@
-import {prepareMessages, prepareAllMessages} from '../src/prepare-messages.js';
+import {prepareMessages, prepareAllMessages} from '../src/prepare-messages.ts';
+import {expect, describe, it} from 'vitest';
+
 
 describe('prepareMessages', () => {
     it('should throw if there are non resolvable dependencies', () => {
@@ -15,9 +17,9 @@ describe('prepareMessages', () => {
             a: '@:b', b: '@:c', c: '@:a'
         };
 
-        (() => prepareMessages(messagesA)).should.throwError(/circular/);
-        (() => prepareMessages(messagesB)).should.throwError(/self referencing/);
-        (() => prepareMessages(messagesC)).should.throwError(/could not be resolved/);
+        expect(() => prepareMessages(messagesA)).toThrowError(/circular/);
+        expect(() => prepareMessages(messagesB)).toThrowError(/self referencing/);
+        expect(() => prepareMessages(messagesC)).toThrowError(/could not be resolved/);
     });
 
     it('should resolve simple resolvable dependencies', () => {
@@ -26,7 +28,7 @@ describe('prepareMessages', () => {
             b: 'Hallo!'
         };
 
-        prepareMessages(messages).should.deepEqual({a: 'Hallo!', b: 'Hallo!'});
+        expect(prepareMessages(messages)).toEqual({a: 'Hallo!', b: 'Hallo!'});
     });
 
     it('should resolve contained resolvable dependencies', () => {
@@ -36,7 +38,11 @@ describe('prepareMessages', () => {
             c: 'Kaffee'
         };
 
-        prepareMessages(messages).should.deepEqual({a: 'Wie möchtest du deinen Kaffee haben?', b: 'deinen Kaffee haben', c: 'Kaffee'});
+        expect(prepareMessages(messages)).toEqual({
+            a: 'Wie möchtest du deinen Kaffee haben?',
+            b: 'deinen Kaffee haben',
+            c: 'Kaffee'
+        });
     });
 
     it('should resolve complex resolvable dependencies', () => {
@@ -52,7 +58,7 @@ describe('prepareMessages', () => {
             }
         };
 
-        prepareMessages(messages).should.deepEqual({
+        expect(prepareMessages(messages)).toEqual({
             a: 'Wie möchtest du deinen Kaffee haben? Vielleicht mit "viel, viel" Milch?',
             b: 'deinen Kaffee haben? Vielleicht mit "viel, viel" Milch',
             c: 'Stell dir vor, der Satz endet mit einem message link, auf den ein Punkt folgt. Ob das klappt?',
@@ -78,7 +84,7 @@ describe('prepareMessages', () => {
             }
         };
 
-        prepareMessages(messages).should.deepEqual({
+        expect(prepareMessages(messages)).toEqual({
             test: {
                 cars: {
                     changeBlueCar: 'Change blue car',
@@ -102,7 +108,7 @@ describe('prepareMessages', () => {
             }
         };
 
-        (() => prepareMessages(messagesA)).should.throwError(/"a", "b", "deeper\.test123abc"/);
+        expect(prepareMessages(messagesA)).toEqual(/"a", "b", "deeper\.test123abc"/);
     });
 
     it('should not process linked messages with unsupported syntax', () => {
@@ -111,7 +117,7 @@ describe('prepareMessages', () => {
         };
 
         const results = prepareMessages(messages);
-        results.debugMe.should.eql('This is „@:{\'a.unsupportedSyntax\'}“, and should „@:{\'not.beProcessed123\'}“ and instead just be returned. @:<other weirdness here>');
+        expect(results.debugMe).toEqual('This is „@:{\'a.unsupportedSyntax\'}“, and should „@:{\'not.beProcessed123\'}“ and instead just be returned. @:<other weirdness here>');
     });
 });
 
@@ -123,7 +129,7 @@ describe('prepareAllMessages', () => {
         };
 
         const results = prepareAllMessages(messages);
-        results.should.eql({
+        expect(results).toEqual({
             'de-DE': {aTest: {nested: 'abc', nested2: 'abc'}},
             'en-US': {aTest: {nested: 'def', nested2: 'abc', nested3: 'def'}}
         });

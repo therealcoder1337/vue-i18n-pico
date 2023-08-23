@@ -1,10 +1,12 @@
-import {log, msg, err} from '../src/utils.js';
+import {log, msg, err} from '../src/utils';
+import {expect, describe, it} from 'vitest';
+
 
 describe('utils', () => {
     describe('log', () => {
         it('should log with prefix', () => {
             const originalLog = console.log;
-            const logged: string[] = [];
+            const logged = [];
 
             console.log = (...args) => logged.push(...args);
 
@@ -12,7 +14,7 @@ describe('utils', () => {
 
             console.log = originalLog;
 
-            logged.should.eql(['vue-i18n-pico: hey ho test123 4']);
+            expect(logged).toEqual(['vue-i18n-pico: hey ho test123 4']);
         });
     });
 
@@ -20,7 +22,7 @@ describe('utils', () => {
         it('should create a string with prefix', () => {
             const result = msg('this', 'is some', 'test', 777);
 
-            result.should.eql('vue-i18n-pico: this is some test 777');
+            expect(result).toEqual('vue-i18n-pico: this is some test 777');
         });
     });
 
@@ -28,13 +30,13 @@ describe('utils', () => {
         it('should create an error object with prefix', () => {
             const obj = err('some error', 'to be thrown', 333);
 
-            (obj instanceof Error).should.eql(true);
+            expect((obj instanceof Error)).toEqual(true);
 
-            obj.message.should.eql('vue-i18n-pico: some error to be thrown 333');
+            expect(obj.message).toEqual('vue-i18n-pico: some error to be thrown 333');
 
-            (() => {
+            expect(() => {
                 throw obj;
-            }).should.throwError(/vue-i18n-pico: some error to be thrown 333/);
+            }).toThrowError(/vue-i18n-pico: some error to be thrown 333/);
         });
     });
 });
