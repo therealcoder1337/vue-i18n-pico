@@ -108,7 +108,7 @@ describe('prepareMessages', () => {
             }
         };
 
-        expect(prepareMessages(messagesA)).toEqual(/"a", "b", "deeper\.test123abc"/);
+        expect(() => prepareMessages(messagesA)).toThrowError(/"a", "b", "deeper\.test123abc"/);
     });
 
     it('should not process linked messages with unsupported syntax', () => {
