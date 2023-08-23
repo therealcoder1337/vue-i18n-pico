@@ -1,4 +1,4 @@
-import makeTranslator from '../src/make-translator';
+import makeTranslator from '../src/make-translator.js';
 import deDe from './fixtures/de-DE.js';
 import enUs from './fixtures/en-US.js';
 import {expect, describe, it} from 'vitest';

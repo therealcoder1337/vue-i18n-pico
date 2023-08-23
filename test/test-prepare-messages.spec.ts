@@ -1,4 +1,4 @@
-import {prepareMessages, prepareAllMessages} from '../src/prepare-messages.ts';
+import {prepareMessages, prepareAllMessages} from '../src/prepare-messages.js';
 import {expect, describe, it} from 'vitest';
 
 
