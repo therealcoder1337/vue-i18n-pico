@@ -1,4 +1,4 @@
-import createI18n from '../src/create-i18n.ts';
+import createI18n from '../src/create-i18n.js';
 import {expect, describe, it} from 'vitest';
 
 const messages = {
@@ -9,11 +9,14 @@ const messages = {
 
 describe('create-i18n', () => {
     it('should throw if "messages" are missing', () => {
+        // @ts-expect-error
         expect(() => createI18n()).toThrowError(/messages/);
     });
 
     it('should throw for invalid "production" value', () => {
+        // @ts-expect-error
         expect(() => createI18n({messages, production: 1})).toThrowError(/production/);
+        // @ts-expect-error
         expect(() => createI18n({messages, production: null})).toThrowError(/production/);
     });
 

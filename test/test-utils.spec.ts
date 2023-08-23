@@ -1,4 +1,4 @@
-import {log, msg, err} from '../src/utils';
+import {log, msg, err} from '../src/utils.js';
 import {expect, describe, it} from 'vitest';
 
 
@@ -6,7 +6,7 @@ describe('utils', () => {
     describe('log', () => {
         it('should log with prefix', () => {
             const originalLog = console.log;
-            const logged = [];
+            const logged: string[] = [];
 
             console.log = (...args) => logged.push(...args);
 
