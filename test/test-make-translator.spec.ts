@@ -2,6 +2,7 @@ import makeTranslator from '../src/make-translator.js';
 import deDe from './fixtures/de-DE.js';
 import enUs from './fixtures/en-US.js';
 import {expect, describe, it} from 'vitest';
+import {ref} from 'vue';
 
 const messages = {['de-DE']: deDe, ['en-US']: enUs};
 
@@ -9,7 +10,7 @@ const messages = {['de-DE']: deDe, ['en-US']: enUs};
 describe('make-translator', () => {
     describe('t', () => {
         it('should correctly translate for the provided locale', () => {
-            const locale = {value: 'de-DE'};
+            const locale = ref('de-DE');
             const t = makeTranslator(messages, {locale});
 
             expect(t('coolTranslation')).toEqual('Tolle Übersetzung!');
@@ -24,20 +25,32 @@ describe('make-translator', () => {
         });
 
         it('should support named interpolation', () => {
-            const locale = {value: 'de-DE'};
+            const locale = ref('de-DE');
             const t = makeTranslator(messages, {locale});
 
-            expect(t('nested.deep.namedInterp', {coolParam: 'Hey 123', otherParam123: 'Wie geht\'s?'})).toEqual('Hey 123, das ist ein Beispiel. Wie geht\'s?');
-            expect(t('nested.deep.namedInterpMultiple', {userName: 'Mista.cat@new', 2: 'wieder'})).toEqual('An Mista.cat@new: Herzlich willkommen, „Mista.cat@new“! Hier sind noch einige Dinge, die wir wieder und wieder durchexerzieren werden, bis du sie verinnerlicht hast. ;)');
+            expect(t('nested.deep.namedInterp', {
+                coolParam: 'Hey 123',
+                otherParam123: 'Wie geht\'s?'
+            })).toEqual('Hey 123, das ist ein Beispiel. Wie geht\'s?');
+            expect(t('nested.deep.namedInterpMultiple', {
+                userName: 'Mista.cat@new',
+                2: 'wieder'
+            })).toEqual('An Mista.cat@new: Herzlich willkommen, „Mista.cat@new“! Hier sind noch einige Dinge, die wir wieder und wieder durchexerzieren werden, bis du sie verinnerlicht hast. ;)');
 
             locale.value = 'en-US';
 
-            expect(t('nested.deep.namedInterp', {coolParam: 'Hey 123', otherParam123: 'How are you doing?'})).toEqual('Hey 123, this is an example. How are you doing?');
-            expect(t('nested.deep.namedInterpMultiple', {userName: 'Mista.cat@new', 2: 'again'})).toEqual('At Mista.cat@new: Welcome, "Mista.cat@new"! Here are a few things we will be practising again and again, until you get the hang of them. ;)');
+            expect(t('nested.deep.namedInterp', {
+                coolParam: 'Hey 123',
+                otherParam123: 'How are you doing?'
+            })).toEqual('Hey 123, this is an example. How are you doing?');
+            expect(t('nested.deep.namedInterpMultiple', {
+                userName: 'Mista.cat@new',
+                2: 'again'
+            })).toEqual('At Mista.cat@new: Welcome, "Mista.cat@new"! Here are a few things we will be practising again and again, until you get the hang of them. ;)');
         });
 
         it('should support list interpolation', () => {
-            const locale = {value: 'de-DE'};
+            const locale = ref('de-DE');
             const t = makeTranslator(messages, {locale});
 
             expect(t('nested.deep.listInterp', [1, 2, 3])).toEqual('Teste nur die List interpolation, sie beginnt mit 1. Die Parameter lauten 1, 2 und 3.');
@@ -50,21 +63,21 @@ describe('make-translator', () => {
         });
 
         it('should revert to fallbackLocale if no translation was found', () => {
-            const locale = {value: 'de-DE'};
-            const fallbackLocale = {value: 'en-US'};
+            const locale = ref('de-DE');
+            const fallbackLocale = ref('en-US');
             const t = makeTranslator(messages, {locale, fallbackLocale});
             expect(t('onlyInEnglish')).toEqual('This translation exists only for locale en-US');
         });
 
         it('should revert to fallbackLocale if selected locale does not exist', () => {
-            const locale = {value: 'de-CH'};
-            const fallbackLocale = {value: 'en-US'};
+            const locale = ref('de-CH');
+            const fallbackLocale = ref('en-US');
             const t = makeTranslator(messages, {locale, fallbackLocale});
             expect(t('onlyInEnglish')).toEqual('This translation exists only for locale en-US');
         });
 
         it('should return the key for non existing translation', () => {
-            const locale = {value: 'de-DE'};
+            const locale = ref('de-DE');
             const t = makeTranslator(messages, {locale});
             expect(t('some.translation.doesNotExist')).toEqual('some.translation.doesNotExist');
             locale.value = 'es-ES';
@@ -72,16 +85,16 @@ describe('make-translator', () => {
         });
 
         it('should also return the key for non-existing locale and missing fallback translation entry', () => {
-            const locale = {value: 'en-AU'};
-            const fallbackLocale = {value: 'en-US'};
+            const locale = ref('en-AU');
+            const fallbackLocale = ref('en-US');
             const t = makeTranslator(messages, {locale, fallbackLocale});
 
             expect(t('some.translation.doesNotExist')).toEqual('some.translation.doesNotExist');
         });
 
         it('should correctly return empty string translation values', () => {
-            const locale = {value: 'de-DE'};
-            const fallbackLocale = {value: 'en-US'};
+            const locale = ref('de-DE');
+            const fallbackLocale = ref('en-US');
             const messages = {
                 'de-DE': {
                     some: {
@@ -107,8 +120,8 @@ describe('make-translator', () => {
         });
 
         it('should return string "[object Object]" if the key points to an object (i.e.: is not deep enough)', () => {
-            const locale = {value: 'de-DE'};
-            const fallbackLocale = {value: 'en-US'};
+            const locale = ref('de-DE');
+            const fallbackLocale = ref('en-US');
             const t = makeTranslator(messages, {locale, fallbackLocale});
 
             expect((typeof t('nested.deep.deeper'))).toEqual('string');
@@ -116,8 +129,8 @@ describe('make-translator', () => {
         });
 
         it('should work with array values and nested array values', () => {
-            const locale = {value: 'de-DE'};
-            const fallbackLocale = {value: 'en-US'};
+            const locale = ref('de-DE');
+            const fallbackLocale = ref('en-US');
             const messages = {
                 'de-DE': {
                     arr: ['eins', 'zwei', 'drei', {nested: [1, 'vier']}, 'fünf', ['ipa']],
@@ -149,7 +162,7 @@ describe('make-translator', () => {
         });
 
         it('should allow overriding the locale via locale option', () => {
-            const locale = {value: 'de-DE'};
+            const locale = ref('de-DE');
             const messages = {
                 'de-DE': {
                     thisIsAMessage: 'Das ist eine Nachricht',
