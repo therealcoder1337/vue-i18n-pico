@@ -1,3 +1,5 @@
+/// <reference path="./src/component-shim.d.ts" />
+
 import createI18n from './src/create-i18n.js';
 import useI18n from './src/use-i18n.js';
 import {prepareMessages, prepareAllMessages} from './src/prepare-messages.js';

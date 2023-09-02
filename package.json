@@ -9,7 +9,7 @@
         "lint": "eslint --ext .js,.ts src/ test/ index.ts",
         "fix": "eslint --ext .js,.ts --fix src/ test/ index.ts",
         "test": "vitest",
-        "prepublishOnly": "tsc"
+        "prepublishOnly": "tsc && ./scripts/postbuild.sh"
     },
     "exports": {
         ".": "./dist/index.js"
