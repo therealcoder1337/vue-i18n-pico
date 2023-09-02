@@ -1,6 +1,6 @@
 {
     "name": "vue-i18n-pico",
-    "version": "0.6.1-typescript",
+    "version": "0.7.0-typescript",
     "description": "Slim & fast i18n for Vue.js",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
