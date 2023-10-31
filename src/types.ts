@@ -35,3 +35,20 @@ export type I18n = {
 };
 
 export type PluginWithI18n = Plugin & I18n;
+
+export type TranslatePluginArgs = {
+    name: string;
+    translations: MessagesObject;
+    fallbackTranslations: MessagesObject | null;
+    messages: Messages;
+    locale: Ref<string>;
+    fallbackLocale?: Ref<string | undefined>;
+    raw: string;
+    result: string;
+    params?: TranslateParams;
+    opts?: TranslateOptions;
+};
+
+export type TranslatePlugin<T extends boolean> = T extends true
+    ? ((args: TranslatePluginArgs) => string) & { intercept: true }
+    : ((args: TranslatePluginArgs) => void) & { intercept?: false };

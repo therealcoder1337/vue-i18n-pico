@@ -3,6 +3,7 @@ import deDe from './fixtures/de-DE.js';
 import enUs from './fixtures/en-US.js';
 import {expect, describe, it} from 'vitest';
 import {ref} from 'vue';
+import type {TranslatePluginArgs} from '../src/types.js';
 
 const messages = {['de-DE']: deDe, ['en-US']: enUs};
 
@@ -176,6 +177,55 @@ describe('make-translator', () => {
 
             expect(t('thisIsAMessage', null, {locale: 'en-US'})).toEqual('This is a message');
             expect(t('showMore', null, {locale: 'en-US'})).toEqual('showMore');
+        });
+    });
+
+    describe('plugins', () => {
+        it('should be invoked with the correct arguments', () => {
+            const locale = ref('de-DE');
+            const spyPlugin = (args: TranslatePluginArgs) => {
+                expect(args.name).toEqual('nested.deep.translateThis');
+                expect(args.fallbackLocale).toBeUndefined();
+                expect(args.fallbackTranslations).toBeNull();
+                expect(args.locale.value).toBe('de-DE');
+                expect((args.translations.nested as any).deep.translateThis).toContain('Übersetze');
+                expect((args.messages['de-DE'].nested as any).deep.translateThis).toContain('Übersetze');
+                expect((args.messages['en-US'].nested as any).deep.translateThis).toContain('Translate');
+                expect(args.raw).toEqual('Übersetze dies, denn es hat nicht nur {0}, sondern auch {1}!');
+                expect(args.result).toEqual('Übersetze dies, denn es hat nicht nur Katzen, sondern auch Capybaras!');
+                expect(args.params).toEqual(['Katzen', 'Capybaras']);
+            };
+
+            const t = makeTranslator(messages, {locale, plugins: [spyPlugin]});
+
+            expect(t('nested.deep.translateThis', ['Katzen', 'Capybaras'])).toEqual('Übersetze dies, denn es hat nicht nur Katzen, sondern auch Capybaras!');
+        });
+
+        it('should only replace the translation when "intercept" is truthy', () => {
+            const locale = ref('de-DE');
+            const nonInterceptingPlugin = () => 'test from non intercepting plugin';
+            const interceptingPlugin = () => 'test from intercepting plugin';
+            interceptingPlugin.intercept = true;
+
+            const t1 = makeTranslator(messages, {locale, plugins: [nonInterceptingPlugin]});
+            const t2 = makeTranslator(messages, {locale, plugins: [interceptingPlugin]});
+
+            expect(t1('nested.deep.translateThis', ['Katzen', 'Capybaras'])).toEqual('Übersetze dies, denn es hat nicht nur Katzen, sondern auch Capybaras!');
+            expect(t2('nested.deep.translateThis', ['Katzen', 'Capybaras'])).toEqual('test from intercepting plugin');
+        });
+
+        it('should return the result of the last intercepting plugin', () => {
+            const locale = ref('de-DE');
+            const interceptingPlugin1 = () => 'test from first plugin';
+            const interceptingPlugin2 = () => 'test from second plugin';
+            const interceptingPlugin3 = () => 'test from third plugin';
+            interceptingPlugin1.intercept = true;
+            interceptingPlugin2.intercept = true;
+            interceptingPlugin3.intercept = true;
+
+            const t = makeTranslator(messages, {locale, plugins: [interceptingPlugin1, interceptingPlugin2, interceptingPlugin3]});
+
+            expect(t('nested.deep.translateThis', ['Katzen', 'Capybaras'])).toEqual('test from third plugin');
         });
     });
 });
