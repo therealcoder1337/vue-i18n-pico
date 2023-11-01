@@ -4,16 +4,14 @@ export type Plugin = {
     install: (app: App) => void;
 };
 
-export type Settings = {
-    messages: Messages;
+export type Settings<T extends MessagesObject = MessagesObject> = {
+    messages: Messages<T>;
     production?: boolean;
     locale?: string;
     fallbackLocale?: string;
 };
 
-export type Messages = {
-    [locale: string]: MessagesObject;
-};
+export type Messages<T extends MessagesObject = MessagesObject> = Record<string, T>;
 
 export type MessagesObject = {
     [key: string]: MessagesValue;
@@ -36,11 +34,11 @@ export type I18n = {
 
 export type PluginWithI18n = Plugin & I18n;
 
-export type TranslatePluginArgs = {
+export type TranslatePluginArgs<T extends MessagesObject = MessagesObject> = {
     name: string;
-    translations: MessagesObject;
-    fallbackTranslations: MessagesObject | null;
-    messages: Messages;
+    translations: T;
+    fallbackTranslations: T | null;
+    messages: Messages<T>;
     locale: Ref<string>;
     fallbackLocale?: Ref<string | undefined>;
     raw: string;
@@ -49,6 +47,11 @@ export type TranslatePluginArgs = {
     opts?: TranslateOptions;
 };
 
-export type TranslatePlugin<T extends boolean> = T extends true
-    ? ((args: TranslatePluginArgs) => string) & { intercept: true }
-    : ((args: TranslatePluginArgs) => void) & { intercept?: false };
+type TranslatePluginIntercept<T extends MessagesObject = MessagesObject> =
+  ((args: TranslatePluginArgs<T>) => string) & { intercept: true };
+
+type TranslatePluginNoIntercept<T extends MessagesObject = MessagesObject> =
+  ((args: TranslatePluginArgs<T>) => void) & { intercept?: false };
+
+export type TranslatePlugin<T extends MessagesObject = MessagesObject> =
+  TranslatePluginIntercept<T> | TranslatePluginNoIntercept<T>;

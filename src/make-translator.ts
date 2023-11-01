@@ -4,7 +4,7 @@ import type {Messages, Translate, TranslateParams, TranslateOptions, MessagesObj
 const reduceList = (carry: string, current: string | number, idx: number) => carry.replaceAll(`{${idx}}`, current as string);
 const reduceNamed = (carry: string, [name, val]: [string, string | number]) => carry.replaceAll(`{${name}}`, val as string);
 
-export default (messages: Messages, {locale, fallbackLocale, plugins}: {locale: Ref<string>; fallbackLocale?: Ref<string | undefined>; plugins?: TranslatePlugin<boolean>[]}): Translate => {
+export default <T extends MessagesObject = MessagesObject>(messages: Messages<T>, {locale, fallbackLocale, plugins}: {locale: Ref<string>; fallbackLocale?: Ref<string | undefined>; plugins?: TranslatePlugin<T>[]}): Translate => {
     return function t (name: string, params?: TranslateParams, opts?: TranslateOptions) {
         const translations = messages[opts?.locale ?? locale.value];
         const fallbackTranslations = fallbackLocale?.value && locale.value !== fallbackLocale?.value ? messages[fallbackLocale!.value!] : null;
