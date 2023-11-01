@@ -3,7 +3,7 @@ import deDe from './fixtures/de-DE.js';
 import enUs from './fixtures/en-US.js';
 import {expect, describe, it} from 'vitest';
 import {ref} from 'vue';
-import type {TranslatePluginArgs} from '../src/types.js';
+import type {TranslatePlugin} from '../src/types.js';
 
 const messages = {['de-DE']: deDe, ['en-US']: enUs};
 
@@ -182,21 +182,23 @@ describe('make-translator', () => {
 
     describe('plugins', () => {
         it('should be invoked with the correct arguments', () => {
+            type MessageSchema = typeof messages['de-DE'] | typeof messages['en-US'];
+
             const locale = ref('de-DE');
-            const spyPlugin = (args: TranslatePluginArgs) => {
+            const spyPlugin: TranslatePlugin<MessageSchema> = (args) => {
                 expect(args.name).toEqual('nested.deep.translateThis');
                 expect(args.fallbackLocale).toBeUndefined();
                 expect(args.fallbackTranslations).toBeNull();
                 expect(args.locale.value).toBe('de-DE');
-                expect((args.translations.nested as any).deep.translateThis).toContain('Übersetze');
-                expect((args.messages['de-DE'].nested as any).deep.translateThis).toContain('Übersetze');
-                expect((args.messages['en-US'].nested as any).deep.translateThis).toContain('Translate');
+                expect(args.translations.nested.deep.translateThis).toContain('Übersetze');
+                expect(args.messages['de-DE'].nested.deep.translateThis).toContain('Übersetze');
+                expect(args.messages['en-US'].nested.deep.translateThis).toContain('Translate');
                 expect(args.raw).toEqual('Übersetze dies, denn es hat nicht nur {0}, sondern auch {1}!');
                 expect(args.result).toEqual('Übersetze dies, denn es hat nicht nur Katzen, sondern auch Capybaras!');
                 expect(args.params).toEqual(['Katzen', 'Capybaras']);
             };
 
-            const t = makeTranslator(messages, {locale, plugins: [spyPlugin]});
+            const t = makeTranslator<MessageSchema>(messages, {locale, plugins: [spyPlugin]});
 
             expect(t('nested.deep.translateThis', ['Katzen', 'Capybaras'])).toEqual('Übersetze dies, denn es hat nicht nur Katzen, sondern auch Capybaras!');
         });

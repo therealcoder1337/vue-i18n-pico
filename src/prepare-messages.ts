@@ -113,13 +113,13 @@ function resolveDependencies (dependencies: MessageDependencies, messages: Messa
     }
 }
 
-export function prepareMessages (messages: MessagesObject) {
+export function prepareMessages<T extends MessagesObject> (messages: T): T {
     const result = walkMessages(messages);
     resolveDependencies(result.dependencies, result.messages, messages);
 
-    return result.messages;
+    return result.messages as T;
 }
 
-export function prepareAllMessages (messagesRaw: Messages) {
+export function prepareAllMessages <T extends MessagesObject> (messagesRaw: Messages<T>): Messages<T> {
     return Object.fromEntries(Object.entries(messagesRaw).map(([locale, messages]) => [locale, prepareMessages(messages)]));
 }

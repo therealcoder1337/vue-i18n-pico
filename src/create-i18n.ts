@@ -3,9 +3,9 @@ import makeTranslator from './make-translator.js';
 import makePlugin from './make-plugin.js';
 import {log, err} from './utils.js';
 import {prepareAllMessages} from './prepare-messages.js';
-import type {PluginWithI18n, Settings} from './types.js';
+import type {MessagesObject, PluginWithI18n, Settings} from './types.js';
 
-export default function createI18n (settings: Settings): PluginWithI18n {
+export default function createI18n<T extends MessagesObject = MessagesObject> (settings: Settings<T>): PluginWithI18n {
     if (!settings.messages) {
         throw err('missing "messages"');
     }
@@ -25,7 +25,7 @@ export default function createI18n (settings: Settings): PluginWithI18n {
     const fallbackLocale = ref(settings.fallbackLocale);
     const messages = settings.production ? messagesRaw : prepareAllMessages(messagesRaw);
 
-    const t = makeTranslator(messages, {locale, fallbackLocale});
+    const t = makeTranslator<T>(messages, {locale, fallbackLocale});
 
     return {...makePlugin(t, locale), t, locale};
 }
