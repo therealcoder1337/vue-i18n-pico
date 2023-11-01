@@ -55,3 +55,11 @@ type TranslatePluginNoIntercept<T extends MessagesObject = MessagesObject> =
 
 export type TranslatePlugin<T extends MessagesObject = MessagesObject> =
   TranslatePluginIntercept<T> | TranslatePluginNoIntercept<T>;
+
+export type TranslateKeys<T, Prefix extends string = ''> =
+  T extends object
+      ? {
+          [K in keyof T]: `${Prefix}${K extends string ? K : ''}` |
+          (T[K] extends object ? `${Prefix}${K extends string ? `${K}.` : ''}${TranslateKeys<T[K], ''>}` : never)
+      }[keyof T]
+      : '';
