@@ -21,14 +21,16 @@ export type MessagesValue = string | number | MessagesObject | MessagesArray;
 
 export type MessagesArray = MessagesValue[];
 
-export type Translate = (key: string, params?: TranslateParams | null, options?: TranslateOptions) => string;
+export type Translate<T extends MessagesObject = MessagesObject> =
+    ((key: TranslateKeys<T>, params?: TranslateParams | null, options?: TranslateOptions) => string) &
+    ((key: string, params?: TranslateParams | null, options?: TranslateOptions) => string);
 
 export type TranslateOptions = {locale: string};
 
 export type TranslateParams = (string | number)[] | {[key: string | number]: string | number} | null;
 
-export type I18n = {
-    t: Translate;
+export type I18n<T extends MessagesObject = MessagesObject> = {
+    t: Translate<T>;
     locale: Ref<string>;
 };
 
