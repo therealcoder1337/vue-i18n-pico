@@ -11,8 +11,5 @@
         "esModuleInterop": true,
         "strict": true,
         "declaration": true
-    },
-    "ts-node": {
-        "files": true
     }
 }
