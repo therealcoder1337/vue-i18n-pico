@@ -9,6 +9,7 @@ export type Settings<T extends MessagesObject = MessagesObject> = {
     production?: boolean;
     locale?: string;
     fallbackLocale?: string;
+    plugins?: TranslatePlugin<T>[];
 };
 
 export type Messages<T extends MessagesObject = MessagesObject> = Record<string, T>;

@@ -24,8 +24,9 @@ export default function createI18n<T extends MessagesObject = MessagesObject> (s
     const locale = ref(settings.locale ?? 'en-US');
     const fallbackLocale = ref(settings.fallbackLocale);
     const messages = settings.production ? messagesRaw : prepareAllMessages(messagesRaw);
+    const plugins = settings.plugins;
 
-    const t = makeTranslator<T>(messages, {locale, fallbackLocale});
+    const t = makeTranslator<T>(messages, {locale, fallbackLocale, plugins});
 
     return {...makePlugin(t, locale), t, locale};
 }
